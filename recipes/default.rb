@@ -8,6 +8,14 @@
 include_recipe 'java'
 include_recipe 'git'
 include_recipe 'citius_jenkins::install_slave'
+
+if node['platform'] == 'rhel' || node['platform'] == 'redhat' || node['platform'] == 'centos'
+  cron 'schedule_chef_client' do  
+    minute '30'
+    command 'chef-client'
+  end
+end
+
 tag('slave')
 ruby_block 'set `slave_labels` node attributes to build-server' do
   block do
